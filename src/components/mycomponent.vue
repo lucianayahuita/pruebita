@@ -19,6 +19,7 @@
             </form>
             <div id="acciones" class="mt-3">
                 <h2>¿No tienes una cuenta? Registrate</h2>
+                <h3>he creado una nueva ramita y la estoy probando</h3>
                 <button @click="register" class="btn btn-secondary btn-block">Crear cuenta</button>
                 <button @click="authWithGoogle" class="btn btn-danger btn-block">Iniciar sesión con Google</button>
             </div>
