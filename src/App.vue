@@ -1,13 +1,16 @@
 <template>
-  <mycomponent />
+  <index />
+  <login />
 </template>
 
 <script>
-import mycomponent from './components/mycomponent.vue'
+import index from './components/index.vue'
+import login from './components/login.vue'
 export default {
   name: 'App',
   components: {
-    mycomponent
+    index,
+    login
   }
 }
 </script>
