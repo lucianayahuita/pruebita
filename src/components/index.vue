@@ -7,7 +7,7 @@
         <a href="#sociedad-cientifica" class="menu">Sociedad Científica</a>
         <a href="#UCB Internacional" class="menu">UCB Internacional</a>
         <router-link to="/login" class="menu">Login</router-link> <!-- Uso de router-link para navegación -->
-        
+
       </nav>
   
       <header>
@@ -16,6 +16,7 @@
   
       <section class="seccion_index">
         <h2>¿Qué es la carrera?</h2>
+        <h2>esta es la prueba de pruebas</h2>
         <p>
           Conjunto estructurado de capacidades prácticas y teóricas para contribuir
           positiva y eficazmente a la solución de los problemas políticos, sociales
