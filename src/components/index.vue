@@ -17,6 +17,7 @@
       <section class="seccion_index">
         <h2>¿Qué es la carrera?</h2>
         <h2>esta es la prueba de pruebas</h2>
+        <h2>pute</h2>
         <p>
           Conjunto estructurado de capacidades prácticas y teóricas para contribuir
           positiva y eficazmente a la solución de los problemas políticos, sociales
