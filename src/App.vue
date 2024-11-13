@@ -1,9 +1,11 @@
 <template>
+
   <div id="app">
     <!-- Elementos comunes opcionales (como un encabezado o pie de página) -->
     <!-- Contenedor principal para cargar vistas dinámicamente -->
     <router-view />
   </div>
+  
 </template>
 
 <script>

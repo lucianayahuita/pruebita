@@ -1,12 +1,16 @@
 <template>
     <div>
         <nav>
-        <router-link to="/" class="menu">UCB</router-link>
-        <router-link to="/FormacionPage" class="menu">Formación</router-link>
-        <router-link to="/NoticiasPage" class="menu">Noticias</router-link>
-        <router-link to="/sociedadCientifica" class="menu">Sociedad Científica</router-link>
-        <router-link to="/UCBinternacional" class="menu">UCB Internacional</router-link>
-        <router-link to="/LoginPage" class="menu">Login</router-link>
+          <router-link to="/ActividadesPage" class="menu">Actividades</router-link>
+          <router-link to="/FormacionPage" class="menu">Formación</router-link> <!--//pregradp y postgrado-->
+          <router-link to="/NoticiasPage" class="menu">Noticias</router-link> <!--//junto con sociedad, revista, y actividades (comunidad no hay repositorio)-->
+          <router-link to="/RepositorioPage" class="menu">Repositorio</router-link>
+          <router-link to="/sociedadCientifica" class="menu">Sociedad Científica</router-link>
+          <router-link to="/Personal_Docente" class="menu">Personal Docente</router-link> 
+          <router-link to="/LoginPage" class="menu">Login</router-link>
+          <div class="imgnav">
+            <img src="https://tja.ucb.edu.bo/wp-content/uploads/2023/06/logo_ucb_2023.png" alt="Logo" height="130" width="300">
+          </div>
         </nav>
       <header>
         <h1 id="titulo">Ciencias Políticas y Relaciones Internacionales</h1>
@@ -79,7 +83,7 @@
   
   <script>
   export default {
-    name: 'MyIndex',
+    name: 'IndexPage',
     data() {
       return {
         usuario: "",
@@ -156,6 +160,10 @@
         color: #003366;
     }
     
+    .imgnav {
+      display:flex;
+      justify-content: flex-start;
+    }
     /* Secciones */
     .seccion_index {
         padding: 25px;

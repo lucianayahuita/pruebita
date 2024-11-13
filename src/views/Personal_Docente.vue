@@ -1,12 +1,12 @@
 <template>
     <div>
-      <!-- Contenido aquí -->
+      
     </div>
   </template>
   
   <script>
   export default {
-    name: 'UCBPage',
+    name: 'Personal_Docente',
     data() {
       return {};
     },
