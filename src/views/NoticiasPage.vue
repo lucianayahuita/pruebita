@@ -50,7 +50,7 @@
       <!-- Formulario de Nueva Noticia (solo para usuarios autorizados) -->
       <div v-if="isAuthorizedUser" class="new-post-form">
         <h2>Ingresar Nueva Noticia</h2>
-        <form @submit.prevent="submitNews" class="form-container">
+        <form @submit.prevent="submitNews" class="form-container" action="http://localhost/proyecto/login/noticiasAPI.php" method="POST" enctype="multipart/form-data">
           <div class="form-group">
             <label for="title">Título:</label>
             <input v-model="newPost.title" type="text" id="title" class="form-control" required />
@@ -62,14 +62,8 @@
           </div>
 
           <div class="form-group">
-            <label for="category">Categoría:</label>
-            <select v-model="newPost.category" id="category" class="form-control">
-              <option value="CONFERENCIAS">CONFERENCIAS</option>
-              <option value="SEMINARIOS">SEMINARIOS</option>
-              <option value="GRADUACIONES">GRADUACIONES</option>
-              <option value="VISITAS">VISITAS</option>
-              <option value="PUBLICACIONES">PUBLICACIONES</option>
-            </select>
+            <label for="foto">Foto:</label>
+            <input type="file" multiple name="foto">
           </div>
 
           <button type="submit" class="btn btn-primary">Publicar Noticia</button>
@@ -148,7 +142,10 @@ export default {
 <style scoped>
 /* Establecer fondo blanco para toda la página */
 body {
-  background-color: rgba(216, 175, 175, 0.815); /* Cambia el fondo de la página a blanco */
+  background: #373B44;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to right, #4286f4, #373B44);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to right, #4286f4, #373B44); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
   font-family: 'Arial', sans-serif; /* Puedes ajustar la tipografía */
   margin: 0;
   padding: 0;
@@ -170,7 +167,7 @@ input[type="radio"] {
   padding: 6px 40px;
   margin: 10px;
   font-size: 20px;
-  background: #e2e2e2;
+  background: #FFCC00;
   border-radius: 5px;
   cursor: pointer;
 }

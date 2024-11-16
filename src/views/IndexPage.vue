@@ -74,8 +74,31 @@
           </div>
         </section>
       </main>
-  
-      <footer>
+      <footer class="footer-container">
+        <div class="contact-info">
+          <h2>CONTACTO</h2>
+          <div class="social-links">
+            <!-- Ícono de Facebook e Instagram-->
+            <div class="social-item">
+              <i class="fab fa-facebook-square"></i>
+              <span><a href="https://www.facebook.com/people/Ciencias-Pol%C3%ADticas-UCB-La-Paz/100070409821200/?mibextid=LQQJ4d">Facebook</a></span>
+            </div>
+            <div class="social-item">
+              <i class="fab fa-instagram"></i>
+              <span><a href="https://www.instagram.com/cienciaspoliticas.ucb?igsh=dTQyMjFsNXllMnhy">Instagram</a></span>
+            </div>
+            <!-- Ícono de UCB -->
+            <div class="social-item">
+              <i class="fab fa-paginaUCB"></i>
+              <span><a href="https://lpz.ucb.edu.bo/">UCB</a></span>
+            </div>
+            <!-- Ícono del lms -->
+            <div class="social-item">
+              <i class="fab fa-lms"></i>
+              <span><a href="https://lms.ucb.edu.bo/">LMS</a></span>
+            </div>
+          </div>
+        </div>
         <p>© 2024 Universidad. Todos los derechos reservados.</p>
       </footer>
     </div>
@@ -207,15 +230,15 @@
     
     /* Pie de página */
     footer {
-        background-color: #003366;
-        color: #FFCC00;
-        padding: 15px 0;
-        text-align: center;
-        position: fixed;
-        bottom: 0;
-        width: 100%;
-        box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.2);
-    }
+    background-color: #003366;
+    color: #FFCC00;
+    padding: 15px 0;
+    text-align: center;
+    width: 100%;
+    box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.2);
+    margin-top: 30px; /* Asegura que haya espacio con el contenido */
+}
+
 
     /* Responsividad */
     @media (max-width: 768px) {
@@ -234,4 +257,54 @@
             margin: 15px 0;
         }
     }
+
+    .footer-container {
+  background-color: #2A2929;
+  color: white;
+  padding: 20px 0;
+  text-align: center;
+  width: 100%;
+  margin-top: 30px;
+}
+  
+.contact-info h2 {
+  color: white;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+  
+.social-links {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+  
+.social-item {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+}
+  
+.social-item i {
+  font-size: 24px;
+  margin-right: 10px;
+  color: #FFD400;
+}
+  
+.social-item span {
+  font-size: 18px;
+}
+  
+a {
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .social-item span {
+    font-size: 16px;
+  }
+  .social-item i {
+    font-size: 20px;
+  }
+}
 </style>
