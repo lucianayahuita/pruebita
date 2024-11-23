@@ -277,15 +277,6 @@ export default {
     };
   },
   methods: {
-    login() {
-      // Implementar la lógica de inicio de sesión aquí
-    },
-    register() {
-      // Redirigir al usuario a la página de registro
-    },
-    authWithGoogle() {
-      // Implementar la lógica de autenticación con Google
-    },
     toggleDarkMode() {
       this.darkMode = !this.darkMode;  
       document.body.classList.toggle("dark-mode", this.darkMode);  

@@ -13,6 +13,8 @@
       <router-link to="/sociedadCientifica" class="menu">Sociedad Científica</router-link>
       <router-link to="/Personal_Docente" class="menu">Personal Docente</router-link>
       <router-link to="/LoginPage" class="menu">Login</router-link>
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+      <i class="bi bi-brightness-high-fill" id="toggleDark" @click="toggleDarkMode"></i>
     </nav>
 
     <!-- Pestañas para alternar entre Tesis y Revistas -->
@@ -48,8 +50,8 @@
           </tr>
         </tbody>
       </table>
-
-      <h2>Registrar Tesis</h2>
+      <div class="form-container">
+        <h2>Registrar Tesis</h2>
       <form @submit.prevent="addTesis" enctype="multipart/form-data">
         <div class="form-group">
           <label for="titulo">Título:</label>
@@ -69,6 +71,7 @@
         </div>
         <button type="submit" class="btn-submit">Registrar Tesis</button>
       </form>
+      </div>
     </div>
 
     <!-- Gestión de Revistas -->
@@ -98,8 +101,8 @@
           </tr>
         </tbody>
       </table>
-
-      <h2>Registrar Revista</h2>
+      <div class="form-container">
+        <h2>Registrar Revista</h2>
       <form @submit.prevent="addRevista" enctype="multipart/form-data">
         <div class="form-group">
           <label for="numero">Número:</label>
@@ -115,6 +118,7 @@
         </div>
         <button type="submit" class="btn-submit">Registrar Revista</button>
       </form>
+      </div>
     </div>
   </div>
   <!-- Footer -->
@@ -184,6 +188,7 @@ export default {
       revistaList: [],
       newTesis: { titulo: "", fecha: "", autor: "" },
       newRevista: { numero: "", tema: "" },
+      darkMode: false, 
     };
   },
   methods: {
@@ -254,6 +259,10 @@ export default {
         console.error("Error en la solicitud DELETE:", error);
       }
     },
+    toggleDarkMode() {
+      this.darkMode = !this.darkMode;  
+      document.body.classList.toggle("dark-mode", this.darkMode);  
+    },
   },
   mounted() {
     this.fetchTesis();
@@ -264,6 +273,108 @@ export default {
 
 
 <style>
+/*modo oscuro*/
+
+#toggleDark {
+  font-size: 2rem;  
+  cursor: pointer; 
+  color: #000;  
+}
+body.dark-mode {
+  background-color: #121212 !important; 
+  color: #ffffff; 
+}
+
+body.dark-mode nav {
+  background-color: #1a1a1a; /* Fondo del nav en modo oscuro */
+}
+
+body.dark-mode nav a {
+  color: #ffffff; /* Color de los enlaces en el nav en modo oscuro */
+}
+/* Modo oscuro para las tablas */
+body.dark-mode .tesis-table {
+  background-color: #333333; /* Fondo oscuro para la tabla */
+  color: #ffffff;  /* Texto blanco para la tabla */
+}
+
+body.dark-mode .tesis-table th,
+body.dark-mode .tesis-table td {
+  border: 1px solid #555555;  /* Borde más oscuro para las celdas */
+}
+
+body.dark-mode .tesis-table th {
+  background-color: #444444; /* Fondo más oscuro para los encabezados */
+}
+
+body.dark-mode .tesis-table td {
+  background-color: #222222; /* Fondo más oscuro para las filas */
+}
+
+body.dark-mode .tesis-table a {
+  color: #ffd700;  /* Color de los enlaces en modo oscuro */
+}
+
+body.dark-mode .tesis-table a:hover {
+  text-decoration: underline;
+}
+/* Modo oscuro para el formulario */
+body.dark-mode .form-container {
+  background-color: #2c2c2c; /* Fondo oscuro para el contenedor del formulario */
+  color: white; /* Color de texto blanco para los formularios */
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Agregar sombra para el formulario */
+}
+body.dark-mode .form-container .form {
+  background-color: #2c2c2c;
+}
+body.dark-mode .form-group label {
+  color: black; /* Color blanco para las etiquetas */
+}
+
+body.dark-mode .form-group input[type="text"],
+body.dark-mode .form-group input[type="date"],
+body.dark-mode .form-group input[type="file"] {
+  color: white; /* Color de texto blanco dentro de los campos */
+  border: 1px solid #555555; /* Borde más oscuro para los campos */
+}
+
+body.dark-mode .form-group input[type="text"]:focus,
+body.dark-mode .form-group input[type="date"]:focus,
+body.dark-mode .form-group input[type="file"]:focus {
+  background-color: #666666; /* Fondo más claro para los campos cuando estén en foco */
+  border-color: #ffd700; /* Borde dorado cuando el campo está enfocado */
+}
+
+body.dark-mode .btn-submit {
+  background-color: #003366; /* Fondo del botón más oscuro */
+  color: white; /* Texto blanco en los botones */
+  border: none;
+  cursor: pointer;
+}
+
+body.dark-mode .btn-submit:hover {
+  background-color: #0059b3; /* Cambio de color cuando el botón está en hover */
+}
+
+body.dark-mode .btn-delete {
+  background-color: #e74c3c; /* Fondo rojo para el botón de eliminar */
+  color: white; /* Texto blanco en el botón de eliminar */
+}
+
+body.dark-mode .btn-delete:hover {
+  background-color: #c0392b; /* Cambio de color cuando el botón de eliminar está en hover */
+}
+
+body.dark-mode .footer-column h3,
+body.dark-mode .footer-column ul li a {
+  color: #ffffff; /* Color de los textos en el footer en modo oscuro */
+}
+
+/* Otros ajustes para elementos interactivos */
+body.dark-mode #toggleDark {
+  color: #ffd700; /* Cambiar el color del ícono cuando se está en modo oscuro */
+}
 /* Estilos para las pestañas */
 .tab-container {
   display: flex;

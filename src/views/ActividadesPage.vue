@@ -13,6 +13,8 @@
       <router-link to="/sociedadCientifica" class="menu">Sociedad Científica</router-link>
       <router-link to="/Personal_Docente" class="menu">Personal Docente</router-link>
       <router-link to="/LoginPage" class="menu">Login</router-link>
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+      <i class="bi bi-brightness-high-fill" id="toggleDark" @click="toggleDarkMode"></i>
     </nav>
   </div>
   <div class="calendar-container">
@@ -155,6 +157,7 @@ export default {
         location: "",
       },
       events: [],
+      darkMode: false, 
     };
   },
   computed: {
@@ -270,6 +273,10 @@ export default {
         console.error("Error en la solicitud DELETE:", error);
       }
     },
+    toggleDarkMode() {
+      this.darkMode = !this.darkMode;  
+      document.body.classList.toggle("dark-mode", this.darkMode);  
+    },
     formatDate(dateTime) {
       const date = new Date(dateTime);
       return date.toLocaleDateString("es-ES", {
@@ -321,6 +328,53 @@ nav a:hover {
 .imgnav {
   display: flex;
   justify-content: flex-start;
+}
+
+/*modo oscuro*/
+
+#toggleDark {
+  font-size: 2rem;  
+  cursor: pointer; 
+  color: #000;  
+}
+body.dark-mode {
+  background-color: #121212 !important; 
+  color: #ffffff; 
+}
+
+body.dark-mode nav {
+  background-color: #1a1a1a; /* Fondo del nav en modo oscuro */
+}
+
+body.dark-mode nav a {
+  color: #ffffff; /* Color de los enlaces en el nav en modo oscuro */
+}
+body.dark-mode .calendar-container{
+  background-color: #1a1a1a;
+}
+body.dark-mode .calendar-container .calendar-widget{
+  background-color: #686D76;
+}
+body.dark-mode .calendar-container .calendar-widget .current-day{
+  background-color: #7D7C7C;
+}
+body.dark-mode .new-post-form {
+  background-color: #333333; 
+}
+body.dark-mode .new-post-form .form-container{
+  background-color: #333333; 
+}
+body.dark-mode label{
+  color:white;
+}
+body.dark-mode .footer-column h3,
+body.dark-mode .footer-column ul li a {
+  color: #ffffff; /* Color de los textos en el footer en modo oscuro */
+}
+
+/* Otros ajustes para elementos interactivos */
+body.dark-mode #toggleDark {
+  color: #ffd700; /* Cambiar el color del ícono cuando se está en modo oscuro */
 }
 /* Estilos Globales */
 .custom-calendar {
