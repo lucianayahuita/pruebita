@@ -1,276 +1,383 @@
 <template>
-  <body>
-    <div>
-    <!-- Filtro de Categorías -->
-    <div class="container-category">
-      <input type="radio" id="TODOS" value="TODOS" name="category" checked />
-      <label for="TODOS">Todos</label>
-
-      <input type="radio" id="CONFERENCIAS" value="CONFERENCIAS" name="category" />
-      <label for="CONFERENCIAS">CONFERENCIAS</label>
-
-      <input type="radio" id="SEMINARIOS" value="SEMINARIOS" name="category" />
-      <label for="SEMINARIOS">SEMINARIOS</label>
-
-      <input type="radio" id="GRADUACIONES" value="GRADUACIONES" name="category" />
-      <label for="GRADUACIONES">GRADUACIONES</label>
-
-      <input type="radio" id="VISITAS" value="VISITAS" name="category" />
-      <label for="VISITAS">VISITAS</label>
-
-      <input type="radio" id="PUBLICACIONES" value="PUBLICACIONES" name="category" />
-      <label for="PUBLICACIONES">PUBLICACIONES</label>
-    </div>
-
+  <div>
+    <nav>
+      <div class="imgnav">
+        <!-- Uso de la ruta relativa correcta para Vue.js -->
+        <img src="@/assets/CPO - H2.png" alt="Logo" height="100" width="140" />
+      </div>
+      <router-link to="/LoginPage" class="menu">Inicio</router-link>
+      <router-link to="/ActividadesPage" class="menu">Actividades</router-link>
+      <router-link to="/FormacionPage" class="menu">Postgrado</router-link>
+      <router-link to="/NoticiasPage" class="menu">Noticias</router-link>
+      <router-link to="/RepositorioPage" class="menu">Publicaciones</router-link>
+      <router-link to="/sociedadCientifica" class="menu">Sociedad Científica</router-link>
+      <router-link to="/Personal_Docente" class="menu">Personal Docente</router-link>
+      <router-link to="/LoginPage" class="menu">Login</router-link>
+    </nav>
+  </div>
+  <div>
     <!-- Contenedor de publicaciones -->
     <div class="container-post">
-      <div class="posts">
-        <div 
-          v-for="post in posts" 
-          :key="post.id" 
-          class="post" 
-          :data-category="post.category"
-        >
-          <div class="ctn-img">
-            <img :src="require('@/assets/gatoprueba.jpg')" alt="Imagen noticia" />
+      <div class="posts-vertical">
+        <div v-for="post in posts" :key="post.id_noticia" class="post">
+          <div class="post-image">
+            <img :src="`http://localhost/proyecto/login/backend/API/${post.imagen_noticia}`" alt="Imagen noticia" />
           </div>
-          <h2>{{ post.title }}</h2>
-          <span>{{ post.date }}</span>
-          <ul class="ctn-tag">
-            <li v-for="tag in post.tags" :key="tag">{{ tag }}</li>
-          </ul>
-          <p v-if="!post.showFullContent">{{ post.shortContent }}</p>
-          <p v-else>{{ post.fullContent }}</p>
-          <button @click="toggleContent(post)">
-            {{ post.showFullContent ? 'Leer menos' : 'Leer más' }}
-          </button>
+          <div class="post-content">
+            <div class="post-header">
+              <h2>{{ post.titulo_noticia }}</h2>
+            </div>
+            <p>{{ post.contenido_noticia }}</p>
+            <div class="post-footer">
+              <button @click="deletePost(post.id_noticia)" class="btn btn-danger">Eliminar</button>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- Formulario de Nueva Noticia (solo para usuarios autorizados) -->
+      <!-- Formulario de Nueva Noticia -->
       <div v-if="isAuthorizedUser" class="new-post-form">
         <h2>Ingresar Nueva Noticia</h2>
-        <form @submit.prevent="submitNews" class="form-container" action="http://localhost/proyecto/login/noticiasAPI.php" method="POST" enctype="multipart/form-data">
+        <form @submit.prevent="submitNews" class="form-container" enctype="multipart/form-data">
           <div class="form-group">
-            <label for="title">Título:</label>
-            <input v-model="newPost.title" type="text" id="title" class="form-control" required />
+            <label for="titulo_noticia">Título:</label>
+            <input v-model="newPost.titulo_noticia" type="text" id="titulo_noticia" class="form-control" required />
           </div>
 
           <div class="form-group">
-            <label for="content">Contenido:</label>
-            <textarea v-model="newPost.content" id="content" rows="5" class="form-control" required></textarea>
+            <label for="contenido_noticia">Contenido:</label>
+            <textarea v-model="newPost.contenido_noticia" id="contenido_noticia" rows="5" class="form-control" required></textarea>
           </div>
 
           <div class="form-group">
-            <label for="foto">Foto:</label>
-            <input type="file" multiple name="foto">
+            <label for="imagen_noticia">Foto:</label>
+            <input type="file" ref="foto" id="imagen_noticia" class="form-control" />
           </div>
 
-          <button type="submit" class="btn btn-primary">Publicar Noticia</button>
+          <button type="submit" class="btn btn-primary" :disabled="isSubmitting">
+            {{ isSubmitting ? 'Publicando...' : 'Publicar Noticia' }}
+          </button>
         </form>
       </div>
     </div>
   </div>
-  </body>
+  <footer class="custom-footer">
+      <div class="footer-content">
+        <!-- Logo y redes sociales -->
+        <div class="footer-column">
+          <img src="@/assets/CPO - H2.png" alt="Logo UCB" class="footer-logo" />
+          <div class="social-icons">
+            <a href="https://www.instagram.com/ucb/" target="_blank" aria-label="Instagram">
+              <i class="fab fa-instagram"></i>
+            </a>
+            <a href="https://www.facebook.com/ucb" target="_blank" aria-label="Facebook">
+              <i class="fab fa-facebook"></i>
+            </a>
+          </div>
+          <p>Copyright © 2024 Universidad Católica Boliviana Derechos reservados.</p>
+        </div>
+
+        <!-- Contacto -->
+        <div class="footer-column">
+          <h3>Contáctenos</h3>
+          <p>AV. 14 de Septiembre N° 4807 esquina, La Paz</p>
+          <p><a href="https://api.whatsapp.com/send/?phone=59175851671&text&type=phone_number&app_absent=0">+591 75851671</a></p>
+        </div>
+
+        <!-- Cuenta -->
+        <div class="footer-column">
+          <h3>Cuenta</h3>
+          <ul>
+            <li><a href="/login">Iniciar sesión</a></li>
+            <li><a href="/app-ios">Aplicación iOS</a></li>
+            <li><a href="/app-android">Aplicación para Android</a></li>
+          </ul>
+        </div>
+
+        <!-- Ingeniería de Sistemas -->
+        <div class="footer-column">
+          <h3>Ciencias Políticas</h3>
+          <ul>
+            <li><a href="https://www.instagram.com/cienciaspoliticas.ucb?igsh=dTQyMjFsNXllMnhy">Instagram</a></li>
+            <li><a href="https://www.facebook.com/profile.php?id=100070409821200&mibextid=LQQJ4d">Facebook</a></li>
+          </ul>
+        </div>
+
+        <!-- Interactivo -->
+        <div class="footer-column">
+          <h3>Interactivo</h3>
+          <ul>
+            <li><a href="https://lpz.ucb.edu.bo/mapa-ucb-lp/">Mapa del campus</a></li>
+            <li><a href="https://lpz.ucb.edu.bo/wp-content/uploads/2023/12/CPO-2024.pdf">Malla curricular</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
 </template>
 
 <script>
+import axios from "axios";
+import Swal from "sweetalert2";
+
 export default {
-  name: 'NoticiasPage',
+  name: "NoticiasPage",
   data() {
     return {
-      isAuthorizedUser: true, // Cambia a "false" si el usuario no tiene permisos de administrador
-      posts: [
-        {
-          id: 1,
-          title: "Cómo crear una página web tipo blog",
-          image: require("@/assets/gatoprueba.jpg"), // Carga de imagen de assets
-          date: "26 febrero 2020 - 1:32 am",
-          tags: ["HTML", "CSS", "JS"],
-          category: "CSS",
-          shortContent: "Este es un resumen corto de la noticia.",
-          fullContent: "Este es el contenido completo de la noticia. Aquí puedes poner todo el detalle del artículo que desees mostrar.",
-          showFullContent: false, // Controla si el contenido completo se muestra o no
-        },
-        {
-          id: 2,
-          title: "Cómo hacer un slider de comparación de imágenes",
-          image: require("@/assets/gatoprueba.jpg"),
-          date: "26 febrero 2020 - 1:32 am",
-          tags: ["HTML"],
-          category: "HTML",
-          shortContent: "En este artículo veremos cómo hacer un slider comparativo de imágenes.",
-          fullContent: "Aquí viene todo el detalle de cómo hacer un slider de comparación de imágenes paso a paso. Agrega la implementación de HTML, CSS, y JavaScript.",
-          showFullContent: false,
-        },
-      ],
+      isAuthorizedUser: true,
+      posts: [],
       newPost: {
-        title: "",
-        content: "",
-        category: "HTML",
+        titulo_noticia: "",
+        contenido_noticia: "",
       },
+      isSubmitting: false,
     };
   },
+  mounted() {
+    this.fetchPosts();
+  },
   methods: {
-    toggleContent(post) {
-      post.showFullContent = !post.showFullContent;
+    async fetchPosts() {
+      try {
+        const response = await axios.get("http://localhost/proyecto/login/backend/API/noticiaAPI.php");
+        if (response.status === 200) {
+          this.posts = response.data;
+        }
+      } catch (error) {
+        console.error("Error al cargar las noticias:", error);
+      }
     },
-    submitNews() {
-      const newPostData = {
-        id: this.posts.length + 1,
-        title: this.newPost.title,
-        content: this.newPost.content,
-        category: this.newPost.category,
-        date: new Date().toLocaleString(),
-        tags: [this.newPost.category],
-        shortContent: this.newPost.content.substring(0, 100), // Resumen corto de la noticia
-        fullContent: this.newPost.content,
-        showFullContent: false,
-        image: require('@/assets/gatoprueba.jpg'), // Imagen por defecto
-      };
+    async submitNews() {
+      if (this.isSubmitting) return;
 
-      // Agregar la nueva noticia a la lista de noticias
-      this.posts.unshift(newPostData);
+      this.isSubmitting = true;
 
-      // Limpiar formulario
-      this.newPost = { title: "", content: "", category: "HTML" };
+      const formData = new FormData();
+      formData.append("titulo_noticia", this.newPost.titulo_noticia);
+      formData.append("contenido_noticia", this.newPost.contenido_noticia);
+      if (this.$refs.foto.files.length > 0) {
+        formData.append("imagen_noticia", this.$refs.foto.files[0]);
+      }
+
+      try {
+        const response = await axios.post(
+          "http://localhost/proyecto/login/backend/API/noticiaAPI.php",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+
+        if (response.data.message === "Datos guardados correctamente") {
+          Swal.fire({
+            icon: "success",
+            title: "¡Noticia Publicada!",
+            text: "La noticia fue añadida con éxito.",
+            confirmButtonText: "Aceptar",
+          });
+          this.fetchPosts();
+          this.newPost = { titulo_noticia: "", contenido_noticia: "" };
+          this.$refs.foto.value = null;
+        } else {
+          console.error("Error en la API:", response.data.message);
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: "Hubo un problema al publicar la noticia.",
+            confirmButtonText: "Aceptar",
+          });
+        }
+      } catch (error) {
+        console.error("Error al añadir la noticia:", error);
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "No se pudo conectar con el servidor.",
+          confirmButtonText: "Aceptar",
+        });
+      } finally {
+        this.isSubmitting = false;
+      }
+    },
+    async deletePost(id_noticia) {
+      try {
+        const response = await axios.delete(
+          "http://localhost/proyecto/login/backend/API/noticiaAPI.php",
+          {
+            data: { id_noticia },
+          }
+        );
+
+        if (response.data.message === "noticia eliminada exitosamente") {
+          Swal.fire({
+            icon: "success",
+            title: "¡Eliminada!",
+            text: "La noticia fue eliminada con éxito.",
+            confirmButtonText: "Aceptar",
+          });
+          this.fetchPosts();
+        } else {
+          console.error("Error al eliminar la noticia:", response.data.message);
+        }
+      } catch (error) {
+        console.error("Error al intentar eliminar la noticia:", error);
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "No se pudo eliminar la noticia.",
+          confirmButtonText: "Aceptar",
+        });
+      }
     },
   },
 };
 </script>
-
-<style scoped>
-/* Establecer fondo blanco para toda la página */
+<style>
+nav {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 15px 0;
+  background-color: #ffffff;
+}
+nav a {
+  color: #030000;
+  text-decoration: none;
+  margin: 0 15px;
+  padding: 10px 20px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  font-weight: bold;
+}
+nav a:hover {
+  background-color: #ffcc00;
+  color: #003366;
+}
+.imgnav {
+  display: flex;
+  justify-content: flex-start;
+}
 body {
-  background: #373B44;  /* fallback for old browsers */
-background: -webkit-linear-gradient(to right, #4286f4, #373B44);  /* Chrome 10-25, Safari 5.1-6 */
-background: linear-gradient(to right, #4286f4, #373B44); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-
-  font-family: 'Arial', sans-serif; /* Puedes ajustar la tipografía */
+  background-color: #F7C74D;
+  font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
 }
 
-/* Filtro de categorías */
-input[type="radio"] {
-  display: none;
-}
-
-.container-category {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin-top: 20px;
-}
-
-.container-category label {
-  padding: 6px 40px;
-  margin: 10px;
-  font-size: 20px;
-  background: #FFCC00;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.container-category label:hover {
-  opacity: 0.8;
-}
-
-/* Sistema de filtrado */
-[value="TODOS"]:checked ~ .posts .post[data-category] {
-  display: block;
-}
-
-[value="HTML"]:checked ~ .posts .post:not([data-category~="HTML"]),
-[value="CSS"]:checked ~ .posts .post:not([data-category~="CSS"]),
-[value="JS"]:checked ~ .posts .post:not([data-category~="JS"]),
-[value="PHP"]:checked ~ .posts .post:not([data-category~="PHP"]),
-[value="NODEJS"]:checked ~ .posts .post:not([data-category~="NODEJS"]),
-[value="VUE"]:checked ~ .posts .post:not([data-category~="VUE"]) {
-  display: none;
-}
-
-[value="TODOS"]:checked ~ .container-category [for="TODOS"],
-[value="HTML"]:checked ~ .container-category [for="HTML"],
-[value="CSS"]:checked ~ .container-category [for="CSS"],
-[value="JS"]:checked ~ .container-category [for="JS"],
-[value="PHP"]:checked ~ .container-category [for="PHP"],
-[value="NODEJS"]:checked ~ .container-category [for="NODEJS"],
-[value="VUE"]:checked ~ .container-category [for="VUE"] {
-  background: #46a2fd;
-  color: #fff;
-}
-
-/* Estilos de publicaciones */
 .container-post {
   max-width: 1200px;
-  margin: 0 auto; /* Centra el contenedor */
+  margin: 0 auto;
   padding: 20px;
 }
 
-.posts {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-gap: 20px;
-  justify-items: center; /* Centra los elementos dentro del grid */
+.posts-vertical {
+  display: flex;
+  flex-direction: column; /* Las tarjetas se apilan verticalmente */
+  gap: 20px; /* Espaciado entre las tarjetas */
 }
 
-.posts .post {
-  background: #fff;
-  box-shadow: 0 0 20px -20px black;
-  border-radius: 6px;
-  padding-bottom: 20px;
+
+.post {
+  background-color: #E08F13;
+  border-radius: 10px;
+  border: 2px solid black; /* Añadir un borde de 2px de color oscuro */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Sombra del card */
+  overflow: hidden;
+  display: flex;
+  flex-direction: row; /* Alinea los elementos de la tarjeta horizontalmente */
+  min-width: 350px; /* Ancho mínimo de cada tarjeta */
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.post:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+.post-image {
+  width: 400px; /* Ancho fijo para la sección de la imagen */
+  height: 400px; /* Altura fija para la sección de la imagen */
+  overflow: hidden; /* Asegura que la imagen no se desborde */
+  border-top-left-radius: 10px; /* Bordes redondeados superiores */
+  border-bottom-left-radius: 10px; /* Bordes redondeados inferiores */
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2); /* Sombra más prominente en el contenedor */
+  background-color: white; /* Fondo del div para evitar transparencias si no hay imagen */
+  display: flex; /* Para alinear el contenido si es necesario */
+  justify-content: center; /* Centrar horizontalmente */
+  align-items: center; /* Centrar verticalmente */
+}
+
+.post-image img {
+  width: 100%; /* La imagen ocupa todo el ancho del contenedor */
+  height: 100%; /* La imagen ocupa toda la altura del contenedor */
+  object-fit: cover; /* Ajusta la imagen para que se recorte proporcionalmente */
+  display: block; /* Asegura que no haya espacio extra */
+}
+
+
+.post-content {
+  padding: 15px;
   display: flex;
   flex-direction: column;
-  height: 100%;
-  max-width: 300px; /* Establece un tamaño máximo para las publicaciones */
-  overflow: hidden;
+  font-family: Arial;
+  color:#333;
+  justify-content: space-between;
+  width: 100%;
 }
 
-.ctn-img img {
-  max-width: 100%;
-  height: auto;
-  border-radius: 6px 6px 0 0;
+.post-header {
+  margin-bottom: 10px;
 }
 
-h2 {
-  padding: 10px;
+.post-header h2 {
+  margin: 0;
+  font-size: 33px;
+  margin-bottom: 10px; /* Reducir espacio debajo del título */
+  font-family:Arial, Helvetica, sans-serif;
+  color: black;
 }
 
-.ctn-tag {
-  margin: 10px 0;
+.post-content p {
+  font-size: 16px; /* Tamaño de fuente */
+  color: white; /* Color del texto */
+  line-height: 1.5; /* Espaciado entre líneas para mejor legibilidad */
+  text-align: justify; /* Justifica el contenido */
+  margin: 10px 0; /* Margen superior e inferior */
+}
+
+
+.post-footer {
   display: flex;
-  gap: 10px;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.ctn-tag li {
-  background: #f0f0f0;
-  border-radius: 5px;
-  padding: 3px 10px;
+.post-footer .post-date {
+  font-size: 0.8em;
+  color: #999;
 }
 
-button {
-  margin-top: 10px;
-  background: #46a2fd;
-  color: white;
+.btn-danger {
+  padding: 15px 20px;
+  background-color: #e74c3c;
+  color: #fff;
   border: none;
-  padding: 10px;
   border-radius: 5px;
   cursor: pointer;
+  transition: background-color 0.3s;
 }
 
-button:hover {
-  background: #3578e5;
+.btn-danger:hover {
+  background-color: #c0392b;
 }
 
-/* Formulario de nueva noticia */
-.form-container {
-  max-width: 600px;
-  margin: 20px auto;
-  padding: 20px;
+.new-post-form {
+  margin-top: 20px;
   background: #fff;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .form-group {
@@ -279,47 +386,115 @@ button:hover {
 
 label {
   font-weight: bold;
+  display: block;
+  margin-bottom: 5px;
 }
 
-.form-control {
+input[type="text"],
+textarea,
+input[type="file"] {
   width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
 }
 
-.form-control:focus {
-  border-color: #46a2fd;
+input:focus,
+textarea:focus {
   outline: none;
+  border-color: #4286f4;
 }
 
 .btn-primary {
-  background-color: #46a2fd;
-  border-color: #46a2fd;
-  color: white;
+  background-color: #4286f4;
+  color: #fff;
   padding: 10px 20px;
-  font-size: 16px;
-  border-radius: 4px;
-  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
 }
 
 .btn-primary:hover {
   background-color: #3578e5;
-  border-color: #3578e5;
 }
 
-.post button {
-  padding: 10px 6px; /* Reduce el padding para que el botón sea más pequeño */
-  font-size: 14px;   /* Disminuye el tamaño de la fuente */
-  border-radius: 60px; /* Mantén un borde redondeado moderado */
-  background-color: #46a2fd;
-  color: white;
-  border: none;
-  cursor: pointer;
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 20px;
 }
 
-.post button:hover {
-  background-color: #3578e5; /* Cambia el color del botón al pasar el mouse */
+.footer-column {
+  flex: 1;
+  min-width: 200px;
 }
 
+.footer-column h3 {
+  font-size: 1.2rem;
+  color: #000;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.footer-column ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-column ul li {
+  margin: 5px 0;
+}
+
+.footer-column ul li a {
+  text-decoration: none;
+  color: #666;
+  transition: color 0.3s;
+}
+
+.footer-column ul li a:hover {
+  color: #003366;
+}
+
+.footer-logo {
+  width: 150px;
+  margin-bottom: 15px;
+}
+
+.social-icons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.social-icons a {
+  font-size: 1.5rem;
+  color: #666;
+  transition: color 0.3s;
+}
+
+.social-icons a:hover {
+  color: #003366;
+}
+
+.footer-column p {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+@media (max-width: 768px) {
+  .footer-content {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .footer-column {
+    text-align: center;
+  }
+
+  .social-icons {
+    justify-content: center;
+  }
+}
 </style>
