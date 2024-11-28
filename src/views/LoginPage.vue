@@ -5,7 +5,7 @@
         <!-- Uso de la ruta relativa correcta para Vue.js -->
         <img src="@/assets/CPO - H2.png" alt="Logo" height="100" width="140" />
       </div>
-      <router-link to="/IndexPage" class="menu">Inicio</router-link>
+      <router-link to="/" class="menu">Inicio</router-link>
       <router-link to="/ActividadesPage" class="menu">Actividades</router-link>
       <router-link to="/FormacionPage" class="menu">Postgrado</router-link>
       <router-link to="/NoticiasPage" class="menu">Noticias</router-link>
@@ -13,6 +13,8 @@
       <router-link to="/sociedadCientifica" class="menu">Sociedad Científica</router-link>
       <router-link to="/Personal_Docente" class="menu">Personal Docente</router-link>
       <router-link to="/LoginPage" class="menu">Login</router-link>
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+      <i class="bi bi-brightness-high-fill" id="toggleDark" @click="toggleDarkMode"></i>
     </nav>
   </div>
   <body>
@@ -29,22 +31,20 @@
     </div>
     <div :class="['formBx', { active: isSignupActive }]">
       <div class="form signinForm">
-        <form action="http://localhost/proyecto/login/backend/API/loguin.php" method="POST">
-          <h3>Docente</h3>
-          <input type="text" placeholder="Usuario" name="usuario">
-          <input type="password" placeholder="Contraseña" name="password" >
-          <input type="submit" value="Ingresar">
-          <a href="../../html/index/indexManEsc.html" class="forgot">Volver a la página PRINCIPAL</a>
+        <form @submit.prevent="handleDocenteLogin">
+        <h3>Docente</h3>
+        <input type="text" placeholder="Usuario" v-model="docenteUser" name="usuario" />
+        <input type="password" placeholder="Contraseña" v-model="docentePassword" name="password" />
+        <input type="submit" value="Ingresar" />
         </form>
       </div>
       <div class="form signupForm">
-  <form @submit.prevent="handleDirectorLogin">
-    <h3>Director de Carrera</h3>
-    <input type="text" placeholder="Usuario" v-model="directorUser" name="usuario" />
-    <input type="password" placeholder="Contraseña" v-model="directorPassword" name="password" />
-    <input type="submit" value="Ingresar" />
-    <a href="/IndexPage" class="forgot">Volver a la página PRINCIPAL</a>
-  </form>
+        <form @submit.prevent="handleDirectorLogin">
+        <h3>Director de Carrera</h3>
+        <input type="text" placeholder="Usuario" v-model="directorUser" name="usuario" />
+        <input type="password" placeholder="Contraseña" v-model="directorPassword" name="password" />
+        <input type="submit" value="Ingresar" />
+      </form>
 </div>
 
     </div>
@@ -106,7 +106,6 @@
 
 <script>
 import Swal from "sweetalert2";
-
 export default {
   name: "LoginPage",
   data() {
@@ -116,39 +115,100 @@ export default {
       docentePassword: "",
       directorUser: "",
       directorPassword: "",
+      darkMode: false, // Lista inicial con datos manuales
     };
+   
   },
   methods: {
     toggleForm(formType) {
       this.isSignupActive = formType === "signup";
     },
-    handleDirectorLogin() {
-  if (this.directorUser === "carlos" && this.directorPassword === "carlos") {
-    console.log("Redirigiendo a /IndexPage"); // Esto debe imprimirse
+    toggleDarkMode() {
+      this.darkMode = !this.darkMode;  
+      document.body.classList.toggle("dark-mode", this.darkMode);  
+    },
+    async handleDocenteLogin() {
+  if (!this.docenteUser || !this.docentePassword) {
     Swal.fire({
-      icon: "success",
-      title: "¡Inicio de sesión exitoso!",
-      text: "Ha iniciado sesión",
+      icon: "warning",
+      title: "Advertencia",
+      text: "Por favor, complete todos los campos",
       confirmButtonText: "Aceptar",
-    }).then(() => {
-      
     });
+    return;
+  }
+
+  try {
+    if (this.docenteUser === "mdiez" && this.docentePassword === "mdiez") {
+      // Guardamos en localStorage solo si las credenciales son correctas
+      localStorage.setItem("isAuthorizedUser", "mdiez");
+
+      Swal.fire({
+        icon: "success",
+        title: "¡Inicio de sesión exitoso!",
+        text: "Bienvenido al sistema como Docente",
+        confirmButtonText: "Aceptar",
+      }).then(() => {
+        this.$router.push("/NoticiasPage");  // Redirigir a la página de Noticias
+      });
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Usuario o contraseña incorrectos",
+        confirmButtonText: "Intentar de nuevo",
+      });
+      localStorage.removeItem('isAuthorizedUser');  // Eliminar el valor si las credenciales son incorrectas
+    }
+  } catch (error) {
+    console.error("Error en la solicitud:", error);
+    Swal.fire({
+      icon: "error",
+      title: "Error del servidor",
+      text: "No se pudo conectar con el servidor. Intente más tarde.",
+      confirmButtonText: "Aceptar",
+    });
+  }
+},
+
+  // Método para el inicio de sesión del Director
+  async handleDirectorLogin() {
+  if (this.directorUser === "carlos" && this.directorPassword === "carlos") {
+    try {
+      // Guardamos en localStorage solo si las credenciales son correctas
+      localStorage.setItem("isAuthorizedUser", "carlos");
+
+      Swal.fire({
+        icon: "success",
+        title: "¡Inicio de sesión exitoso!",
+        text: "Bienvenido al sistema como Director",
+        confirmButtonText: "Aceptar",
+      }).then(() => {
+        this.$router.push("/NoticiasPage");  // Redirigir a la página de Noticias
+      });
+    } catch (error) {
+      console.error("Error en la solicitud:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Error del servidor",
+        text: "No se pudo conectar con el servidor. Intente más tarde.",
+        confirmButtonText: "Aceptar",
+      });
+    }
   } else {
-    console.log("Credenciales incorrectas");
     Swal.fire({
       icon: "error",
       title: "Error",
       text: "Usuario o contraseña incorrectos",
       confirmButtonText: "Intentar de nuevo",
     });
+    localStorage.removeItem('isAuthorizedUser');  // Eliminar el valor si las credenciales son incorrectas
   }
 },
-    handleDocenteLogin() {
-      alert("Funcionalidad de Docente aún no implementada");
-    },
-  },
+  }
 };
 </script>
+
 <style scoped>
 nav {
   display: flex;
@@ -180,7 +240,9 @@ body
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: #0078b7;
+    background: #c02425; /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #c02425, #f0cb35); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #c02425, #f0cb35); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
     transition: 0.5s;
 }
 body.active
@@ -188,12 +250,64 @@ body.active
     background: #cc0001;
 
 }
+/*para el modo oscuro*/
+#toggleDark {
+  font-size: 2rem;  
+  cursor: pointer; 
+  color: #000;  
+}
+body.dark-mode {
+  background-color: #121212 !important; 
+  color: #ffffff; 
+}
+
+body.dark-mode nav {
+  background-color: #1a1a1a; /* Fondo del nav en modo oscuro */
+}
+
+body.dark-mode nav a {
+  color: #ffffff; /* Color de los enlaces en el nav en modo oscuro */
+}
+
+body.dark-mode .split-section {
+  background-color: #333333; /* Fondo de las secciones en modo oscuro */
+  color: white;
+}
+body.dark-mode .new-post-form {
+  background-color: #333333; 
+}
+body.dark-mode .new-post-form .form-container{
+  background-color: #333333; 
+}
+body.dark-mode label{
+  color:white;
+}
+body.dark-mode .footer-column h3,
+body.dark-mode .footer-column ul li a {
+  color: #ffffff; /* Color de los textos en el footer en modo oscuro */
+}
+
+/* Otros ajustes para elementos interactivos */
+body.dark-mode #toggleDark {
+  color: #ffd700; /* Cambiar el color del ícono cuando se está en modo oscuro */
+}
 .container
 {
     position: relative;
     width: 800px;
     height: 500px;
     margin: 20px;
+}
+@keyframes borderRadiusAnimation {
+  0% {
+    border-radius: 25%; /* Bordes cuadrados al inicio */
+  }
+  50% {
+    border-radius: 50%; /* Bordes redondeados a la mitad de la animación */
+  }
+  100% {
+    border-radius: 50%; /* Bordes moderadamente redondeados al final */
+  }
 }
 .blueBg
 {
@@ -206,6 +320,7 @@ body.active
     align-items: center;
     background: rgba(255, 255, 255, 0.2);
     box-shadow: 0 5px 45px rgba(0,0,0,0.15);
+    animation: borderRadiusAnimation 3s infinite;
 }
 .blueBg .box
 {
@@ -234,6 +349,28 @@ body.active
     font-weight: 500;
     border: none;
 }
+@keyframes borderAnimation {
+  0% {
+    border: 2px solid #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+  }
+  25% {
+    border: 2px solid transparent;
+    box-shadow: 0 0 10px rgba(255, 0, 0, 1), 0 0 20px rgba(255, 0, 0, 0.5);
+  }
+  50% {
+    border: 2px solid #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+  }
+  75% {
+    border: 2px solid transparent;
+    box-shadow: 0 0 10px rgba(255, 0, 0, 1), 0 0 20px rgba(255, 0, 0, 0.5);
+  }
+  100% {
+    border: 2px solid #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+  }
+}
 .formBx
 {
     position: absolute;
@@ -247,6 +384,7 @@ body.active
     justify-content: center;
     align-items: center;
     box-shadow: 0 5px 45px rgba(0,0,0,0.25);
+    animation: borderAnimation 3s infinite; /* Añade la animación */
     transition: 0.5s ease-in-out;
     overflow: hidden;
 }
@@ -296,7 +434,7 @@ body.active
 }
 .formBx .form form input
 {
-    width: 70%;
+    width: 90%;
     margin-bottom: 20px;
     padding: 10px;
     outline: none;
@@ -308,7 +446,7 @@ body.active
     background: #0078b7;
     border: none;
     color: #fff;
-    max-width: 100px;
+    max-width: 200px;
     cursor: pointer;
 }
 .formBx.active .signupForm input[type="submit"]

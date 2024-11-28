@@ -5,7 +5,7 @@
         <!-- Uso de la ruta relativa correcta para Vue.js -->
         <img src="@/assets/CPO - H2.png" alt="Logo" height="100" width="140" />
       </div>
-      <router-link to="/LoginPage" class="menu">Inicio</router-link>
+      <router-link to="/" class="menu">Inicio</router-link>
       <router-link to="/ActividadesPage" class="menu">Actividades</router-link>
       <router-link to="/FormacionPage" class="menu">Postgrado</router-link>
       <router-link to="/NoticiasPage" class="menu">Noticias</router-link>
@@ -19,6 +19,9 @@
   </div>
   <div>
     <!-- Contenedor de publicaciones -->
+    <div class="logout-button-container">
+    <button v-if="isAuthorizedUser" @click="logout" class="btn btn-secondary">Cerrar sesión</button>
+    </div>
     <div class="container-post">
       <div class="posts-vertical">
         <div v-for="post in posts" :key="post.id_noticia" class="post">
@@ -29,9 +32,20 @@
             <div class="post-header">
               <h2>{{ post.titulo_noticia }}</h2>
             </div>
-            <p>{{ post.contenido_noticia }}</p>
+           <!-- Mostrar contenido truncado y botón "Ver más" -->
+           <p v-if="!post.showFullContent">
+              {{ post.contenido_noticia.substring(0, 200) }}...
+              <button @click="toggleContent(post.id_noticia)" class="btn btn-link">Ver más</button>
+            </p>
+            
+            <!-- Mostrar contenido completo cuando se ha hecho clic en "Ver más" -->
+            <p v-if="post.showFullContent">
+              {{ post.contenido_noticia }}
+              <button @click="toggleContent(post.id_noticia)" class="btn btn-link">Ver menos</button>
+            </p>
             <div class="post-footer">
-              <button @click="deletePost(post.id_noticia)" class="btn btn-danger">Eliminar</button>
+              <!-- Botón de eliminar solo visible si el usuario está autorizado -->
+              <button v-if="isAuthorizedUser" @click="deletePost(post.id_noticia)" class="btn btn-danger">Eliminar</button>
             </div>
           </div>
         </div>
@@ -125,20 +139,49 @@ export default {
   name: "NoticiasPage",
   data() {
     return {
-      isAuthorizedUser: true,
+      isAuthorizedUser: false,  // Asegúrate que esto esté en false por defecto
       posts: [],
       newPost: {
         titulo_noticia: "",
         contenido_noticia: "",
       },
       isSubmitting: false,
-      darkMode: false, 
+      darkMode: false,
     };
   },
   mounted() {
     this.fetchPosts();
+    this.checkAuthorization();  // Verificar si el usuario está autorizado al montar el componente
   },
   methods: {
+    checkAuthorization() {
+      const isAuthorized = localStorage.getItem("isAuthorizedUser");
+
+      if (isAuthorized === "carlos" || isAuthorized === "mdiez") {
+        this.isAuthorizedUser = true;  // Solo si el valor en localStorage es "carlos" o "mdiez"
+      } else {
+        this.isAuthorizedUser = false; // Si no, no está autorizado
+      }
+    },
+    async logout() {
+      // Aquí no hace falta hacer una llamada al backend si solo queremos esconder el formulario
+      localStorage.removeItem('isAuthorizedUser');
+      this.isAuthorizedUser = false;  // Oculta el formulario
+      Swal.fire({
+            icon: "success",
+            title: "¡Se ha cerrado sesion!",
+            text: "Se ha cerrado de sesión exitosamente.",
+            confirmButtonText: "Aceptar",
+          });
+      this.$router.push("/LoginPage");  // Redirige a la página de login
+    },
+     // Método para alternar el contenido entre completo y truncado
+     toggleContent(postId) {
+      const post = this.posts.find(p => p.id_noticia === postId);
+      if (post) {
+        post.showFullContent = !post.showFullContent; // Cambiar el estado de visibilidad del contenido
+      }
+    },
     async fetchPosts() {
       try {
         const response = await axios.get("http://localhost/proyecto/login/backend/API/noticiaAPI.php");
@@ -149,6 +192,7 @@ export default {
         console.error("Error al cargar las noticias:", error);
       }
     },
+
     async submitNews() {
       if (this.isSubmitting) return;
 
@@ -203,6 +247,7 @@ export default {
         this.isSubmitting = false;
       }
     },
+
     async deletePost(id_noticia) {
       try {
         const response = await axios.delete(
@@ -233,6 +278,7 @@ export default {
         });
       }
     },
+
     toggleDarkMode() {
       this.darkMode = !this.darkMode;  
       document.body.classList.toggle("dark-mode", this.darkMode);  
@@ -337,7 +383,26 @@ body {
   min-width: 350px; /* Ancho mínimo de cada tarjeta */
   transition: transform 0.3s, box-shadow 0.3s;
 }
+.btn-link {
+    background-color: transparent; 
+    color: blue; 
+    padding: 5px 10px; 
+    border: none; 
+    text-decoration: underline; 
+    font-size: 14px; 
+    cursor: pointer; 
+    transition: color 0.3s, transform 0.2s ease; 
+  }
 
+  .btn-link:hover {
+    color: #3578e5; 
+    transform: scale(1.05); 
+  }
+
+  .btn-link:focus {
+    outline: none; 
+    box-shadow: 0 0 5px rgba(66, 134, 244, 0.8); 
+  }
 .post:hover {
   transform: translateY(-5px);
   box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2);
@@ -430,6 +495,26 @@ body {
 
 .form-group {
   margin-bottom: 15px;
+}
+.logout-button-container {
+  display: flex;
+  justify-content: center;  /* Centra el contenido horizontalmente */
+  align-items: center;      /* Centra el contenido verticalmente */
+}
+.logout-button-container button {
+  align-items: center;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+.logout-button-container button:hover {
+  background-color: #c0392b;
 }
 
 label {

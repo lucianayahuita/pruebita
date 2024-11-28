@@ -5,7 +5,7 @@
         <!-- Uso de la ruta relativa correcta para Vue.js -->
         <img src="@/assets/CPO - H2.png" alt="Logo" height="100" width="140" />
       </div>
-      <router-link to="/IndexPage" class="menu">Inicio</router-link>
+      <router-link to="/" class="menu">Inicio</router-link>
       <router-link to="/ActividadesPage" class="menu">Actividades</router-link>
       <router-link to="/FormacionPage" class="menu">Postgrado</router-link>
       <router-link to="/NoticiasPage" class="menu">Noticias</router-link>
@@ -17,9 +17,11 @@
       <i class="bi bi-brightness-high-fill" id="toggleDark" @click="toggleDarkMode"></i>
     </nav>
 
-    <header>
-      <h1 id="titulo">Ciencias Políticas y Relaciones Internacionales</h1>
+    <!-- Header con el carrusel de fondo -->
+    <header :style="{ backgroundImage: 'url(' + currentImage + ')' }" class="carousel-header">
+      <h1 class="header-title">Ciencias Políticas y Relaciones Internacionales</h1>
     </header>
+
 
     <main>
       <!-- Sección 1 -->
@@ -266,21 +268,44 @@
 
 <script>
 export default {
-  name: "IndexPage",
+  name: "HeaderCarousel",
   data() {
     return {
-      usuario: "",
-      password: "",
-      error: false,
-      error_msg: "",
+      images: [
+        require('@/assets/inicio4.webp'),
+        require('@/assets/pazmun.jpg'),
+        require('@/assets/inicio2.jpg'),
+      ], // Lista de imágenes
+      currentImageIndex: 0, // Índice actual del carrusel
+      intervalId: null, // ID del intervalo para limpiar al desmontar
       darkMode: false,  // Aquí se guarda el estado del tema
     };
   },
+  computed: {
+    currentImage() {
+      return this.images[this.currentImageIndex];
+    },
+  },
   methods: {
+    startCarousel() {
+      this.intervalId = setInterval(() => {
+        this.currentImageIndex =
+          (this.currentImageIndex + 1) % this.images.length;
+      }, 5000); // Cambiar cada 5 segundos
+    },
     toggleDarkMode() {
       this.darkMode = !this.darkMode;  
       document.body.classList.toggle("dark-mode", this.darkMode);  
     },
+  },
+  mounted() {
+    this.startCarousel();
+  },
+  beforeUnmount() {
+    // Limpiar el intervalo cuando el componente se desmonta
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+    }
   },
 };
 </script>

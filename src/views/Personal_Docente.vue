@@ -2,10 +2,9 @@
   <div>
     <nav>
       <div class="imgnav">
-        <!-- Uso de la ruta relativa correcta para Vue.js -->
         <img src="@/assets/CPO - H2.png" alt="Logo" height="100" width="140" />
       </div>
-      <router-link to="/LoginPage" class="menu">Inicio</router-link>
+      <router-link to="/" class="menu">Inicio</router-link>
       <router-link to="/ActividadesPage" class="menu">Actividades</router-link>
       <router-link to="/FormacionPage" class="menu">Postgrado</router-link>
       <router-link to="/NoticiasPage" class="menu">Noticias</router-link>
@@ -280,8 +279,9 @@ body.dark-mode #toggleDark {
   padding: 20px;
   flex-wrap: wrap;
   background: #f12711;  /* fallback for old browsers */
-background: -webkit-linear-gradient(to right, #f5af19, #f12711);  /* Chrome 10-25, Safari 5.1-6 */
-background: linear-gradient(to right, #f5af19, #f12711); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: #000428;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to right, #004e92, #000428);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to right, #004e92, #000428); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
 /* Tarjetas de docentes */

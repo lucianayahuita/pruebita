@@ -2,29 +2,33 @@
 include '../conectar.php';
 
 header('Content-Type: application/json');
-
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type, Authorization');
 try {
     if (!empty($_POST['usuario']) && !empty($_POST['password'])) {
-        $usuario = $_POST['usuario'];
-        $password = $_POST['password'];
-
-        // Obtener conexión desde conectar.php
+        $usuario = trim($_POST['usuario']);
+        $password = trim($_POST['password']);
+        if (strlen($usuario) > 20 || strlen($password) > 20) {
+            echo json_encode(['success' => false, 'message' => 'Usuario o contraseña inválidos']);
+            exit;
+        }
         $mysqli = conexion();
-
-        // Preparar consulta segura
-        $stmt = $mysqli->prepare("SELECT * FROM docente WHERE usuario = ? AND password = ?");
-        $stmt->bind_param("ss", $usuario, $password);
+        $stmt = $mysqli->prepare("SELECT id_docente, password FROM docente WHERE usuario = ? AND (eliminado IS NULL OR eliminado = 0)");
+        $stmt->bind_param("s", $usuario);
         $stmt->execute();
-
-        // Obtener resultados
         $result = $stmt->get_result();
-
         if ($result->num_rows > 0) {
-            echo json_encode(['success' => true, 'message' => 'Inicio de sesión exitoso']);
+            $row = $result->fetch_assoc();
+            $storedPassword = $row['password']; 
+            if ($password === $storedPassword) {
+                echo json_encode(['success' => true, 'message' => 'Inicio de sesión exitoso']);
+            } else {
+                echo json_encode(['success' => false, 'message' => 'Usuario o contraseña incorrectos']);
+            }
         } else {
             echo json_encode(['success' => false, 'message' => 'Usuario o contraseña incorrectos']);
         }
-
         $stmt->close();
         $mysqli->close();
     } else {

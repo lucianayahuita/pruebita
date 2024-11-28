@@ -1,7 +1,5 @@
 
 import { createRouter, createWebHistory } from 'vue-router';
-
-// Importación de componentes desde las vistas
 import IndexPage from '@/views/IndexPage.vue'; 
 import ActividadesPage from '@/views/ActividadesPage.vue';
 import NoticiasPage from '@/views/NoticiasPage.vue';
@@ -19,11 +17,23 @@ const routes = [
     name: 'FormacionPage', 
     beforeEnter() {
       // Redirigir a la URL externa
-      window.location.href = 'https://lpz.ucb.edu.bo/derecho-y-ciencias-politicas/';
+      window.open('https://lpz.ucb.edu.bo/derecho-y-ciencias-politicas/', '_blank');
     }
   },
   { path: '/NoticiasPage', name: 'NoticiasPage', component: NoticiasPage },
-  { path: '/RepositorioPage', name: 'RepositorioPage', component: RepositorioPage },
+  {
+    path: '/RepositorioPage',
+    name: 'RepositorioPage',
+    component: RepositorioPage,
+    beforeEnter: (to, from, next) => {
+      const isAuthorized = localStorage.getItem('isAuthorizedUser');
+      if (isAuthorized) {
+        next(); 
+      } else {
+        next('/LoginPage'); 
+      }
+    }
+  },
   { path: '/SociedadCientifica', name: 'SociedadCientifica', component: SociedadCientifica },
   { path: '/Personal_Docente', name: 'Personal_Docente', component: Personal_Docente },
   { path: '/LoginPage', name: 'LoginPage', component: LoginPage },

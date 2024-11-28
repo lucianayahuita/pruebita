@@ -5,7 +5,7 @@
         <!-- Uso de la ruta relativa correcta para Vue.js -->
         <img src="@/assets/CPO - H2.png" alt="Logo" height="100" width="140" />
       </div>
-      <router-link to="/LoginPage" class="menu">Inicio</router-link>
+      <router-link to="/" class="menu">Inicio</router-link>
       <router-link to="/ActividadesPage" class="menu">Actividades</router-link>
       <router-link to="/FormacionPage" class="menu">Postgrado</router-link>
       <router-link to="/NoticiasPage" class="menu">Noticias</router-link>
@@ -17,8 +17,8 @@
       <i class="bi bi-brightness-high-fill" id="toggleDark" @click="toggleDarkMode"></i>
     </nav>
   </div>
+
   <div class="calendar-container">
-    <!-- Sección del calendario -->
     <div class="calendar-widget">
       <div class="current-day">
         <h1>{{ currentDay }}</h1>
@@ -29,7 +29,7 @@
             {{ event.title }} - {{ formatDate(event.start) }}
           </li>
         </ul>
-        <button @click="toggleForm" class="btn-create">Crear Evento</button>
+        <button v-if="isAuthorizedUser" @click="toggleForm" class="btn-create">Crear Evento</button>
       </div>
       <div class="calendar">
         <h1>Calendario</h1>
@@ -43,7 +43,7 @@
     </div>
 
     <!-- Formulario para crear un evento -->
-    <div v-if="showForm" class="event-form">
+    <div v-if="showForm && isAuthorizedUser" class="event-form">
       <h2>Crear Nueva Actividad</h2>
       <form @submit.prevent="addEvent">
         <div class="form-group">
@@ -80,13 +80,14 @@
           <h3>{{ event.title }}</h3>
           <p><strong>Hora:</strong> {{ formatTime(event.start) }}</p>
           <p><strong>Lugar:</strong> {{ event.location }}</p>
-          <button @click="deleteEvent(event.id)" class="btn-complete">
+          <button v-if="isAuthorizedUser" @click="deleteEvent(event.id)" class="btn-complete">
             Eliminar
           </button>
         </div>
       </div>
     </div>
   </div>
+    
   <footer class="custom-footer">
       <div class="footer-content">
         <!-- Logo y redes sociales -->
@@ -157,7 +158,8 @@ export default {
         location: "",
       },
       events: [],
-      darkMode: false, 
+      isAuthorizedUser: false, // Verificar si el usuario está autorizado
+      darkMode: false,
     };
   },
   computed: {
@@ -187,13 +189,18 @@ export default {
     },
   },
   methods: {
+    checkAuthorization() {
+      const isAuthorized = localStorage.getItem("isAuthorizedUser");
+      this.isAuthorizedUser = isAuthorized === "carlos" || isAuthorized === "mdiez";
+    },
+    toggleForm() {
+      this.showForm = !this.showForm;
+    },
     async fetchEvents() {
       try {
         const response = await axios.get(
           "http://localhost/proyecto/login/backend/API/actividadAPI.php"
         );
-        console.log("Respuesta de la API:", response.data);
-
         if (response.status === 200 && Array.isArray(response.data)) {
           this.events = response.data.map((actividad) => ({
             id: actividad.id_actividad,
@@ -202,11 +209,8 @@ export default {
             end: `${actividad.fecha_actividad}T${actividad.hora_actividad}`,
             location: actividad.lugar_actividad,
           }));
-        } else {
-          console.error(
-            "La respuesta no es válida o no contiene un array:",
-            response.data
-          );
+          // Ordenar los eventos por la fecha más cercana
+          this.events.sort((a, b) => new Date(a.start) - new Date(b.start));
         }
       } catch (error) {
         console.error("Error en la solicitud GET:", error);
@@ -242,7 +246,7 @@ export default {
 
         if (response.data.message === "Actividad registrada correctamente") {
           alert("Evento guardado con éxito");
-          this.fetchEvents(); // Recarga la lista de eventos
+          this.fetchEvents(); // Recarga la lista de eventos y ordena
           this.newEvent = { title: "", date: "", time: "", location: "" };
           this.showForm = false;
         } else {
@@ -274,8 +278,8 @@ export default {
       }
     },
     toggleDarkMode() {
-      this.darkMode = !this.darkMode;  
-      document.body.classList.toggle("dark-mode", this.darkMode);  
+      this.darkMode = !this.darkMode;
+      document.body.classList.toggle("dark-mode", this.darkMode);
     },
     formatDate(dateTime) {
       const date = new Date(dateTime);
@@ -292,17 +296,13 @@ export default {
         minute: "2-digit",
       });
     },
-    toggleForm() {
-      this.showForm = !this.showForm;
-    },
   },
   mounted() {
+    this.checkAuthorization();
     this.fetchEvents();
   },
 };
 </script>
-
-
 
 <style>
 nav {

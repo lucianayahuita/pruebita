@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <!-- Mostrar el contenido de las rutas en un 'router-view' -->
-    <router-view></router-view> <!-- Las vistas cambiarán dependiendo de la ruta -->
+    <router-view :is-authorized="isAuthorizedUser"></router-view> <!-- Pasar la autorización al router-view -->
     <!-- Icono de modo oscuro que se puede pulsar -->
     <i class="bi bi-brightness-high-fill" id="toggleDark" @click="toggleDarkMode"></i>
   </div>
@@ -10,13 +10,34 @@
 <script>
 export default {
   name: 'App',
+  data() {
+    return {
+      isAuthorizedUser: false,  // Variable que controla si el usuario está autorizado
+    };
+  },
   mounted() {
+    // Verificar si el usuario está autorizado al montar el componente
+    this.checkAuthorization(); 
+
     // Al montar el componente, verificar si el modo oscuro está activo en localStorage
     if (localStorage.getItem('darkMode') === 'true') {
       document.body.classList.add('dark-mode');  // Aplicar el modo oscuro
     }
   },
   methods: {
+    // Método para verificar la autorización del usuario
+    checkAuthorization() {
+      const isAuthorized = localStorage.getItem("isAuthorizedUser");
+
+      // Solo autorizados "carlos" o "mdiez" podrán acceder
+      if (isAuthorized === "carlos" || isAuthorized === "mdiez") {
+        this.isAuthorizedUser = true;  // Si el usuario es "carlos" o "mdiez", es autorizado
+      } else {
+        this.isAuthorizedUser = false; // Si no es válido, no se autoriza
+        localStorage.removeItem('isAuthorizedUser');  // Limpiar cualquier valor previo
+      }
+    },
+
     toggleDarkMode() {
       // Comprobar si el modo oscuro está activado
       const isDarkMode = document.body.classList.contains('dark-mode');
@@ -34,7 +55,7 @@ export default {
 
 <style>
 /* Estilos globales */
-
+@import 'font-awesome/css/font-awesome.min.css';
 body {
   font-family: 'Arial', sans-serif;
   margin: 0;
@@ -84,3 +105,4 @@ body.dark-mode #toggleDark {
   color: #ffd700;  /* Cambiar el color del ícono de modo oscuro en el modo oscuro */
 }
 </style>
+
