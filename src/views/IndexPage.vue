@@ -316,37 +316,47 @@ export default {
   padding: 0;
   box-sizing: border-box;
 }
-#titulo {
-  color: #ffffff;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 2rem;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-}
+
 body {
   background-color: #f9f9f9;
   font-family: "Arial", sans-serif;
   color: #333;
   line-height: 1.6;
+  width: 100%;
 }
+
+/* Header */
 header {
-  background-image: url('@/assets/imagenIndex.webp'); /* Ruta relativa */
+  background-image: url('@/assets/imagenIndex.webp');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  height: 30vh; /* Altura relativa al viewport */
-  min-height: 300px; /* Altura mínima */
+  height: 30vh;
+  min-height: 300px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
+  width: 100%;
 }
+
+@media (max-width: 768px) {
+  header {
+    height: 40vh;
+    min-height: 200px;
+  }
+}
+
+/* Nav */
 nav {
   display: flex;
   justify-content: flex-start;
   align-items: center;
   padding: 15px 0;
   background-color: #ffffff;
+  flex-wrap: wrap;
 }
+
 nav a {
   color: #030000;
   text-decoration: none;
@@ -355,71 +365,90 @@ nav a {
   border-radius: 5px;
   transition: background-color 0.3s ease, color 0.3s ease;
   font-weight: bold;
+  display: block;
 }
+
 nav a:hover {
   background-color: #ffcc00;
   color: #003366;
 }
+
 .imgnav {
   display: flex;
   justify-content: flex-start;
 }
-/*para el modo oscuro*/
-#toggleDark {
-  font-size: 2rem;  
-  cursor: pointer; 
-  color: #000;  
+
+@media (max-width: 768px) {
+  nav {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  nav a {
+    width: 100%;
+    margin: 5px 0;
+    text-align: center;
+    padding: 10px;
+  }
 }
+
+/* Para el modo oscuro */
+#toggleDark {
+  font-size: 2rem;
+  cursor: pointer;
+  color: #000;
+}
+
 body.dark-mode {
-  background-color: #121212 !important; 
-  color: #ffffff; 
+  background-color: #121212 !important;
+  color: #ffffff;
 }
 
 body.dark-mode nav {
-  background-color: #1a1a1a; /* Fondo del nav en modo oscuro */
+  background-color: #1a1a1a;
 }
 
 body.dark-mode nav a {
-  color: #ffffff; /* Color de los enlaces en el nav en modo oscuro */
+  color: #ffffff;
 }
 
 body.dark-mode .split-section {
-  background-color: #333333; /* Fondo de las secciones en modo oscuro */
+  background-color: #333333;
   color: white;
-}
-body.dark-mode .card-section {
-  background-color: #222222; /* Fondo del footer en modo oscuro */
-  color: white;
-}
-body.dark-mode .custom-footer {
-  background-color: #222222; /* Fondo del footer en modo oscuro */
-}
-body.dark-mode .interactive-card-section{
-  background-color: #222222; 
-}
-body.dark-mode .card-grid .card{
-  background-color: #293737; 
 }
 
-body.dark-mode .card-grid .card .card-content p,body.dark-mode .card-grid .card .card-content h3 {
-  color: white; /* Color blanco para el contenido de las tarjetas */
+body.dark-mode .card-section {
+  background-color: #222222;
+  color: white;
 }
+
+body.dark-mode .custom-footer {
+  background-color: #222222;
+}
+
+body.dark-mode .interactive-card-section {
+  background-color: #222222;
+}
+
+body.dark-mode .card-grid .card {
+  background-color: #293737;
+}
+
 body.dark-mode .media-content {
-  background-color: #222222; /* Fondo oscuro para los videos o imágenes */
+  background-color: #222222;
 }
 
 body.dark-mode .text-content {
-  color: white; /* Texto blanco en las secciones de contenido */
+  color: white;
 }
 
 body.dark-mode .footer-column h3,
 body.dark-mode .footer-column ul li a {
-  color: #ffffff; /* Color de los textos en el footer en modo oscuro */
+  color: #ffffff;
 }
 
-/* Otros ajustes para elementos interactivos */
 body.dark-mode #toggleDark {
-  color: #ffd700; /* Cambiar el color del ícono cuando se está en modo oscuro */
+  color: #ffd700;
 }
 
 .split-section {
@@ -459,12 +488,13 @@ body.dark-mode #toggleDark {
   color: #333333;
   font-family: Arial, sans-serif;
 }
-/* */
+
+/* Sección identidad */
 .identity-section {
   position: relative;
   width: 100%;
-  min-height: 600px; /* Ajusta la altura según sea necesario */
-  background-image: url('@/assets/ciencias.webp'); /* Ruta de la imagen de fondo */
+  min-height: 600px;
+  background-image: url('@/assets/ciencias.webp');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -479,70 +509,72 @@ body.dark-mode #toggleDark {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 51, 102, 0.8); /* Color azul oscuro semitransparente */
+  background-color: rgba(0, 51, 102, 0.8);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   padding: 20px;
   text-align: center;
-  color: white; /* Color del texto */
+  color: white;
+  overflow: hidden; /* Evita que el texto sobrepase la sección */
 }
 
 .identity-section .section-title {
-  font-size: 2.5rem; /* Tamaño del título */
+  font-size: 2.5rem;
   font-weight: bold;
   margin-bottom: 20px;
-  color: #ffd700; /* Amarillo */
+  color: #ffd700;
 }
 
 .section-description {
-  font-size: 1.1rem; /* Tamaño del texto */
+  font-size: 1.1rem;
   line-height: 1.8;
   margin-bottom: 15px;
-  color: #ffffff; /* Blanco */
+  color: #ffffff;
   text-align: left;
+  padding: 0 10px; /* pequeño padding */
 }
 
-/* Estilo para la nueva sección */
 .interactive-card-section {
-      padding: 40px 20px;
-    }
+  padding: 40px 20px;
+}
 
-    .section-title {
-      text-align: center;
-      color: #003366;
-      margin-bottom: 30px;
-      font-size: 2rem;
-      font-weight: bold;
-    }
+.section-title {
+  text-align: center;
+  color: #003366;
+  margin-bottom: 20px;
+  font-size: 2.5rem;
+  font-weight: bold;
+}
 
-    .interactive-card-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 20px;
-    }
+.interactive-card-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
 
-    .interactive-card {
-      width: 300px;
-      height: 300px;
-      perspective: 1000px;
-    }
+.interactive-card {
+  width: 300px;
+  height: 300px;
+  perspective: 1000px;
+}
 
-    .interactive-card .card-content {
-      width: 100%;
-      height: 100%;
-      position: relative;
-      overflow: hidden;
-      border-radius: 10px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      transition: transform 0.3s;
-    }
+.interactive-card .card-content {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s;
+}
 
-    .interactive-card:hover .card-content {
-      transform: translateY(-5px);
-      /* From Uiverse.io by mrhyddenn */ 
+.interactive-card:hover .card-content {
+  transform: translateY(-5px);
+}
+
 .button {
   -moz-appearance: none;
   -webkit-appearance: none;
@@ -662,65 +694,64 @@ body.dark-mode #toggleDark {
   background-color: #fff;
 }
 
-    }
+.interactive-card .card-image {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 10px;
+}
 
-    .interactive-card .card-image {
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      border-radius: 10px;
-    }
+.interactive-card .card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease-in-out;
+}
 
-    .interactive-card .card-image img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.3s ease-in-out;
-    }
+.interactive-card:hover .card-image img {
+  transform: scale(1.1);
+}
 
-    .interactive-card:hover .card-image img {
-      transform: scale(1.1); /* Zoom en la imagen */
-    }
+.interactive-card .card-hover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 179, 102, 0.9);
+  color: black;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  opacity: 0;
+  padding: 20px;
+  border-radius: 10px;
+  transition: opacity 0.3s ease-in-out;
+}
 
-    .interactive-card .card-hover {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(255, 179, 102, 0.9); /* Fondo amarillo suave */
-      color: black; /* Letras negras */
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      opacity: 0;
-      padding: 20px;
-      border-radius: 10px;
-      transition: opacity 0.3s ease-in-out;
-    }
+.interactive-card:hover .card-hover {
+  opacity: 1;
+}
 
-    .interactive-card:hover .card-hover {
-      opacity: 1; /* Mostrar el contenido al pasar el cursor */
-    }
-    .interactive-card h3 {
-      color:#003366;
-      text-align: center;
-    }
+.interactive-card h3 {
+  color:#003366;
+  text-align: center;
+}
 
-    .card-hover h3 {
-      font-size: 1.2rem;
-      margin-bottom: 10px;
-      font-weight: bold;
-    }
+.card-hover h3 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
 
-    .card-hover p {
-      font-size: 1rem;
-      line-height: 1.5;
-    }
+.card-hover p {
+  font-size: 1rem;
+  line-height: 1.5;
+}
 
-/* Sección de tarjetas */
+/* Cuadrícula de tarjetas */
 .card-section {
   padding: 40px 20px;
 }
@@ -733,7 +764,6 @@ body.dark-mode #toggleDark {
   font-weight: bold;
 }
 
-/* Diseño de la cuadrícula */
 .card-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -773,96 +803,133 @@ body.dark-mode #toggleDark {
   line-height: 1.6;
 }
 
-/* Responsividad */
+/* Ajustes responsivos */
 @media (max-width: 768px) {
+  header {
+    height: 40vh;
+  }
+  header .header-title {
+    font-size: 1.8rem; 
+  }
+  .split-section {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .text-content, .media-content {
+    padding: 10px;
+  }
+
+  .media-content iframe {
+    width: 100%;
+    height: auto;
+  }
+
+  .identity-section {
+    min-height: 400px; /* Reducir altura en pantallas más pequeñas */
+  }
+
+  .section-title {
+    font-size: 2rem; /* Reducir tamaño del título */
+    margin-bottom: 15px;
+  }
+
+  .section-description {
+    font-size: 1rem; /* Reducir tamaño de la descripción */
+    text-align: center; /* Centrado del texto */
+    margin-bottom: 10px;
+  }
+
+  .overlay {
+    padding: 15px; /* Reducir padding para pantallas más pequeñas */
+  }
+  .interactive-card-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .interactive-card {
+    width: 100%;
+    max-width: 300px;
+  }
+
   .card-grid {
     grid-template-columns: 1fr;
+    gap: 20px;
   }
 
   .card-image {
     height: 150px;
   }
-}
 
-.footer-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  flex-wrap: wrap;
-  gap: 20px;
-}
-
-.footer-column {
-  flex: 1;
-  min-width: 200px;
-}
-
-.footer-column h3 {
-  font-size: 1.2rem;
-  color: #000;
-  margin-bottom: 10px;
-  font-weight: bold;
-}
-
-.footer-column ul {
-  list-style: none;
-  padding: 0;
-}
-
-.footer-column ul li {
-  margin: 5px 0;
-}
-
-.footer-column ul li a {
-  text-decoration: none;
-  color: #666;
-  transition: color 0.3s;
-}
-
-.footer-column ul li a:hover {
-  color: #003366;
-}
-
-.footer-logo {
-  width: 150px;
-  margin-bottom: 15px;
-}
-
-.social-icons {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-bottom: 10px;
-}
-
-.social-icons a {
-  font-size: 1.5rem;
-  color: #666;
-  transition: color 0.3s;
-}
-
-.social-icons a:hover {
-  color: #003366;
-}
-
-.footer-column p {
-  font-size: 0.9rem;
-  color: #666;
-}
-
-@media (max-width: 768px) {
-  .footer-content {
+  .card-title {
+    font-size: 1.2rem;
+  }
+  nav {
     flex-direction: column;
     align-items: center;
   }
 
-  .footer-column {
+  nav a {
+    width: 100%;
     text-align: center;
+    padding: 10px;
   }
 
-  .social-icons {
-    justify-content: center;
+  .card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .media-content img {
+    width: 100%;
   }
 }
+
+@media (max-width: 480px) {
+  header {
+    height: 50vh;
+  }
+  header .header-title {
+    font-size: 1.5rem; 
+  }
+  .section-title {
+    font-size: 1.5rem; /* Aún más pequeño en pantallas muy pequeñas */
+  }
+  .identity-section {
+    min-height: 300px; /* Reducir aún más la altura */
+  }
+
+  .section-title {
+    font-size: 1.5rem; /* Aún más pequeño en pantallas muy pequeñas */
+    margin-bottom: 10px;
+  }
+
+  .section-description {
+    font-size: 0.9rem; /* Más pequeño aún */
+    line-height: 1.5;
+    text-align: center;
+    padding: 0 5px;
+  }
+
+  .overlay {
+    padding: 10px; /* Reducir aún más el padding */
+  }
+  .section-description {
+    font-size: 0.9rem; 
+    line-height: 1.5; 
+  }
+
+  .interactive-card .card-image {
+    height: 120px;
+  }
+
+  .card-content {
+    font-size: 0.9rem;
+  }
+  .footer-column {
+    font-size: 0.9rem;
+  }
+}
+
 
 </style>
